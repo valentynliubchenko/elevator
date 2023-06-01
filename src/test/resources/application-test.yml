@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;
+
+houseThreadPool:
+  openDoorTimeSleep: 0
+  closeDoorTimeSleep: 0
+  visitFloorTimeSleep: 0
+  moveCabinTimeSleep: 0

@@ -1,0 +1,13 @@
+@startuml
+
+actor Controller
+
+Controller -> stopCabinCommand: execute(HashMap<String, Object>)
+activate stopCabinCommand
+stopCabinCommand -> Engine: change engineState to STAYING
+stopCabinCommand -> SequenceOfStops: remove stop
+stopCabinCommand -> Controller: removeSequence()
+stopCabinCommand -> FloorButton: change ButtonState to UNPRESSED
+deactivate stopCabinCommand
+
+@enduml

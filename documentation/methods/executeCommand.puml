@@ -1,0 +1,10 @@
+@startuml
+
+actor invoker
+
+invoker -> Controller : executeCommand(nameCommand, params)
+activate Controller
+Controller  -> Controller: getCommand(nameCommand)
+Controller ->Command : execute(params)
+deactivate Controller
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+
+actor Passenger
+
+Passenger -> FloorButton: pressDownButton()
+
+FloorButton -> FloorButton: change ButtonState to PRESSED
+
+FloorButton -> ElevatorDriver: addNewSequenceToOrder(Sequence)
+
+@enduml

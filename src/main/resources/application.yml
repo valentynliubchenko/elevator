@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    username: sa
+    password: pwd
+    url: jdbc:h2:file:./db/demodb;MODE=Oracle
+    driverClassName: org.h2.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: validate
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/changelog-master.yml
+
+house:
+  elevatorCountCabin: 2
+  floorsCount: 16
+
+houseThreadPool:
+  openDoorTimeSleep: 1000
+  closeDoorTimeSleep: 2000
+  visitFloorTimeSleep: 1000
+  moveCabinTimeSleep: 1000

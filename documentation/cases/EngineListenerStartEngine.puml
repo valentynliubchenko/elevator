@@ -1,0 +1,13 @@
+@startuml
+
+actor StartEngineCommand
+
+StartEngineCommand -> Shaft: startEngine(direction)
+activate Shaft
+Shaft -> Engine: start(direction)
+Shaft -> Shaft: fireEngineState()
+Shaft -> EngineService: handleEngineStateChanged(event)
+deactivate Shaft
+EngineService -> ShaftRepository: updateEngineStateById(id, engineState)
+
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+
+actor Client
+
+Client -> FloorController: goUpCabinRequest(houseId, floorNumber)
+FloorController -> FloorService: goUpCabinRequest(houseId, floorNumber)
+FloorService -> Floor: pressUpButton()
+Floor -> FloorButton: press(floorNumber, direction)
+FloorButton -> PressUpButtonCommand: execute(HashMapParams: house, numberOfFloor, direction)
+PressUpButtonCommand -> FindNearestCabinCommand: execute(HashMapParams: house, numberOfFloor, direction)
+
+activate FindNearestCabinCommand
+FindNearestCabinCommand -> House: findNearestCabin(orderSequenceOfStops)
+House -> FindNearestCabinCommand: updateSequence(nearestCabin)
+FindNearestCabinCommand -> HouseRepository: updateOrderSequenceOfStops(orderSequenceOfStops, houseId)
+FindNearestCabinCommand -> ShaftRepository: updateSequenceOfStops(sequenceOfStops, shaftId)
+FindNearestCabinCommand -> MoveCabinCommand: execute(HashMapParams: nearestCabin)
+deactivate FindNearestCabinCommand
+
+activate MoveCabinCommand
+MoveCabinCommand -> StartEngineCommand: execute(HashMapParams: Shaft)
+MoveCabinCommand -> VisitFloorCommand: execute(HashMapParams: Shaft)
+deactivate MoveCabinCommand
+
+activate VisitFloorCommand
+VisitFloorCommand -> Shaft: setCabinPosition(cabinPosition)
+deactivate VisitFloorCommand
+
+Shaft -> ElevatorDriver: handleCabinPositionChanged(event)
+activate ElevatorDriver
+ElevatorDriver -> StopEngineCommand: execute(HashMapParams: Shaft)
+ElevatorDriver -> OpenDoorCommand: execute(HashMapParams: Shaft)
+OpenDoorCommand -> Shaft: openDoor()
+deactivate ElevatorDriver
+Shaft -> ElevatorDriver: handleDoorStateChanged(event)
+ElevatorDriver -> CloseDoorCommand: execute(HashMapParams: Shaft)
+CloseDoorCommand -> Shaft: closeDoor()
+Shaft -> ElevatorDriver: handleDoorStateChanged(event)
+ElevatorDriver -> Shaft: clearSequence()
+
+@enduml

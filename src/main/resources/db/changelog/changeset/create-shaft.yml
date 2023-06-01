@@ -1,0 +1,102 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_shaft_table_1
+      author: egorBP
+      changes:
+        - createTable:
+            tableName: SHAFT
+            columns:
+              - column:
+                  name: ID
+                  type: LONG
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: PK_SHAFT
+              - column:
+                  name: CABIN_POSITION
+                  type: INT
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: DOOR_STATE
+                  type: varchar(10)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: ENGINE_STATE
+                  type: varchar(10)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: OVERWEIGHT_STATE
+                  type: varchar(20)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: HOUSE_ID
+                  type: LONG
+                  constraints:
+                    unique: false
+                    nullable: false
+                    foreignKeyName: FK_HOUSE_SHAFT
+                    references: HOUSE(ID)
+                    deleteCascade: true
+              - column:
+                  name: SEQUENCE_OF_STOPS
+                  type: varchar(512)
+                  constraints:
+                    unique: false
+                    nullable: true
+
+  - changeSet:
+      id: insert_shaft_1
+      author: egorBP
+      changes:
+        - insert:
+            tableName: SHAFT
+            columns:
+              - column:
+                  name: CABIN_POSITION
+                  value: 1
+              - column:
+                  name: DOOR_STATE
+                  value: CLOSED
+              - column:
+                  name: ENGINE_STATE
+                  value: STAYING
+              - column:
+                  name: OVERWEIGHT_STATE
+                  value: NOT_OVERWEIGHT
+              - column:
+                  name: HOUSE_ID
+                  value: 1
+
+
+  - changeSet:
+      id: insert_shaft_2
+      author: egorBP
+      changes:
+        - insert:
+            tableName: SHAFT
+            columns:
+              - column:
+                  name: CABIN_POSITION
+                  value: 2
+              - column:
+                  name: DOOR_STATE
+                  value: CLOSED
+              - column:
+                  name: ENGINE_STATE
+                  value: STAYING
+              - column:
+                  name: OVERWEIGHT_STATE
+                  value: NOT_OVERWEIGHT
+              - column:
+                  name: HOUSE_ID
+                  value: 1

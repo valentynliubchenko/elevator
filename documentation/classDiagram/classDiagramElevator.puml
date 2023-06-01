@@ -1,0 +1,215 @@
+@startuml
+entity ElevatorDriver{
+id: int
+public addNewSequenceToOrder()
+public updateSequenceInOrder()
+
+}
+
+enum DoorState{
+OPENED
+CLOSED
+}
+
+entity Cabin{
+id: int
+
+public doorOpeningRestriction()
+}
+
+entity SequenceOfStops {
+id: int
+stopFloors: int[]
+currentFloor: int
+}
+
+Direction "direction" --o SequenceOfStops
+
+
+enum EngineState{
+GOING_UP
+GOING_DOWN
+STAYING
+}
+
+enum Direction{
+UPWARDS
+DOWNWARDS
+}
+
+enum ButtonState{
+PRESSED
+UNPRESSED
+}
+
+entity "CabinButton"{
+cabinId: int
+buttonValue: int
+
+press(): void
+unPress(): void
+isPressed(): bool
+}
+
+
+abstract "FloorButton"{
+  isPressed(): bool
+  press(int floor, Direction direction): void
+  unPress(): void
+}
+
+entity "UpFloorButton" {
+  id: int
+
+  press(int floor): void
+}
+
+entity "DownFloorButton" {
+ id: int
+
+ press(int floor): void
+}
+
+"UpFloorButton" --|> "FloorButton"
+"DownFloorButton" --|> "FloorButton"
+
+abstract Floor{
+  id: int
+  visit(): void
+}
+
+interface FloorWithUpButton {
+  pressUpButton(): void
+}
+
+interface FloorWithDownButton {
+ pressDownButton(): void
+}
+
+
+
+entity FirstFloor {
+  id: int
+}
+
+FirstFloor --|> Floor
+FirstFloor ..|> FloorWithUpButton
+
+entity LastFloor {
+  id: int
+}
+
+LastFloor --|> Floor
+LastFloor ..|> FloorWithDownButton
+
+entity MiddleFloor {
+  id: int
+}
+
+"UpFloorButton" "upButton" --o FirstFloor
+"UpFloorButton" "upButton" --o MiddleFloor
+
+"DownFloorButton" "downButton" --o MiddleFloor
+"DownFloorButton" "downButton" --o LastFloor
+
+MiddleFloor --|> Floor
+MiddleFloor ..|> FloorWithUpButton
+MiddleFloor ..|> FloorWithDownButton
+
+Direction "direction" --o "FloorButton"
+
+Cabin "1" o-- "N cabinButtons" "CabinButton"
+ButtonState "isPressed " --o "FloorButton"
+ButtonState "isPressed " --o "CabinButton"
+
+entity Engine {
+  id: int
+
+  public stop()
+  public start(Direction)
+}
+
+Engine o-- "engineState" EngineState
+
+entity Shaft {
+  id: int
+  cabinPosition: int
+  clearSequence()
+  updateSequenceOfStops()
+}
+
+Shaft "1" o-- "1 engine" Engine
+
+ElevatorDriver "1" o-- "N floors" Floor
+ElevatorDriver "1" o--> "N shafts" Shaft
+
+Shaft "1" o-- "1 cabin" Cabin
+
+Cabin o-- "doorState" DoorState
+
+SequenceOfStops "1 sequenceOfStops" --o "1" Shaft
+ElevatorDriver "1" o-- "0..N orderSequenceOfStops" SequenceOfStops
+
+entity House {
+  id: int
+
+  public moveSequenceToShaft()
+}
+
+House "1" o-- "N floors" Floor
+House "1" o-- "N shafts" Shaft
+
+interface Command {
+    execute()
+}
+
+class MoveCabinCommand {
+    elevatorDriver: ElevatorDriver
+}
+class OpenDoorCommand {
+    elevatorDriver: ElevatorDriver
+}
+class CloseDoorCommand {
+    elevatorDriver: ElevatorDriver
+}
+class DisplayCurrentPositionCommand{
+    elevatorDriver: ElevatorDriver
+}
+class StopCabinCommand {
+    elevatorDriver: ElevatorDriver
+
+    private checkOverweight(): boolean
+    private displayOverweight(): void
+}
+
+class FindNearestCabinCommand {
+    elevatorDriver: ElevatorDriver
+}
+
+enum OverweightState {
+    OVERWEIGHTED
+    NOT_OVERWEIGHTED
+}
+
+class CommandManager {
+    commandMap: HashMap <String, Command>
+
+    public registerCommand(): void
+    public getCommand(String name): Command
+}
+
+OverweightState "isOverweighted" --o Cabin
+
+MoveCabinCommand  ..|> Command
+OpenDoorCommand  ..|> Command
+CloseDoorCommand  ..|> Command
+DisplayCurrentPositionCommand  ..|> Command
+StopCabinCommand  ..|> Command
+FindNearestCabinCommand  ..|> Command
+
+
+ElevatorDriver "m" *--> "1 commandMap" Command
+Shaft "m" o--> "1 commandMap" Command
+
+
+@enduml

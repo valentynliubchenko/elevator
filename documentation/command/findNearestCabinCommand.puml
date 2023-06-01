@@ -1,0 +1,14 @@
+@startuml
+
+actor ElevatorDriver
+
+ElevatorDriver -> findNearestCabinCommand: execute(HashMap<String, Object>)
+activate findNearestCabinCommand
+findNearestCabinCommand -> ElevatorDriver: getFirstSequenceFromOrder()
+deactivate findNearestCabinCommand
+ElevatorDriver -> ElevatorDriver: moveSequenceToShaft
+activate ElevatorDriver
+ElevatorDriver -> Shaft: updateSequence
+deactivate ElevatorDriver
+@enduml
+

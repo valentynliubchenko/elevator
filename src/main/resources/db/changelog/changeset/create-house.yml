@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_house_table_1
+      author: egorBP
+      changes:
+        - createTable:
+            tableName: HOUSE
+            columns:
+              - column:
+                  name: ID
+                  type: LONG
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: PK_HOUSE
+              - column:
+                  name: NUMBER_OF_FLOORS
+                  type: INT
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: NUMBER_OF_SHAFTS
+                  type: INT
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: ORDER_SEQUENCE_OF_STOPS
+                  type: varchar(512)
+                  constraints:
+                    unique: false
+                    nullable: true
+  - changeSet:
+      id: insert_house_1
+      author: egorBP
+      changes:
+        - insert:
+            tableName: HOUSE
+            columns:
+              - column:
+                  name: NUMBER_OF_FLOORS
+                  value: 16
+              - column:
+                  name: NUMBER_OF_SHAFTS
+                  value: 2

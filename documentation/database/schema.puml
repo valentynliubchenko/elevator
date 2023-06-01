@@ -1,0 +1,22 @@
+@startuml
+
+entity House {
+id: int
+numberOfFloors: int
+numberOfShafts: int
+orderSequenceOfStops: varchar
+}
+
+entity Shaft {
+id: int
+cabinPosition: int
+doorState: varchar
+engineState: varchar
+overweightState: varchar
+houseId: int
+sequenceOfStops: varchar
+}
+
+House "1 houseId" o-- "N numberOfShafts" Shaft
+
+@enduml

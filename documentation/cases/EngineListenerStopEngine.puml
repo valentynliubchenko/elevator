@@ -1,0 +1,13 @@
+@startuml
+
+actor StopEngineCommand
+
+StopEngineCommand -> Shaft: stopEngine()
+activate Shaft
+Shaft -> Engine: stop()
+Shaft -> Shaft: fireEngineState()
+Shaft -> EngineService: handleEngineStateChanged(event)
+deactivate Shaft
+EngineService -> ShaftRepository: updateEngineStateById(id, engineState)
+
+@enduml

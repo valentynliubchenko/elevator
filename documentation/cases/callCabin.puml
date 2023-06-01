@@ -1,0 +1,37 @@
+@startuml
+
+actor Passenger
+
+Passenger ->  FloorButton: pressDownButton()
+activate FloorButton
+FloorButton -> FloorButton: change ButtonState to PRESSED
+
+FloorButton -> ElevatorDriver: addNewSequenceToOrder(Sequence)
+deactivate FloorButton
+
+activate ElevatorDriver
+
+ElevatorDriver -> ElevatorDriver: executeCommand("findNearestCabin", params)
+
+ElevatorDriver -> Shafts: activate
+deactivate ElevatorDriver
+activate Shafts
+loop "for each stop from sequanceOfStops"
+Shafts -> ElevatorDriver: executeCommand("moveCabin", params)
+Shafts <-- ElevatorDriver
+Shafts -> ElevatorDriver: executeCommand("stopCabin", params)
+Shafts <-- ElevatorDriver
+
+Shafts -> ElevatorDriver: executeCommand("openDoor", params)
+Shafts <-- ElevatorDriver
+
+Shafts -> ElevatorDriver: executeCommand("closeDoor", params)
+Shafts <-- ElevatorDriver
+
+end
+Shafts -> Shafts:clearSequence
+
+Shafts --> ElevatorDriver
+deactivate Shafts
+
+@enduml

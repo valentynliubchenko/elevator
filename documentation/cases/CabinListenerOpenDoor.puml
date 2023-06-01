@@ -1,0 +1,14 @@
+@startuml
+
+actor OpenDoorCommand
+
+OpenDoorCommand -> Shaft: openCabinDoor()
+activate Shaft
+Shaft -> Cabin: openDoor()
+Shaft -> Shaft: fireDoorState()
+Shaft -> CabinService: handleDoorStateChanged(event)
+CabinService -> ShaftRepository: updateDoorStateById(id, DoorState)
+Shaft -> ElevatorDriver: handleDoorStateChanged(event)
+deactivate Shaft
+
+@enduml

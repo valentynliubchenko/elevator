@@ -1,0 +1,13 @@
+@startuml
+
+actor VisitFloorCommand
+
+VisitFloorCommand -> Shaft: setCabinPosition(currentFloor)
+activate Shaft
+Shaft -> Shaft: fireCabinPosition()
+Shaft -> ShaftService: handleCabinPositionChanged(event)
+ShaftService -> ShaftRepository: updateCabinPositionById(id, cabinPosition)
+Shaft -> ElevatorDriver: handleCabinPositionChanged(event)
+deactivate Shaft
+
+@enduml
